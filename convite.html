@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Convite • Noite do Terror</title>
+  <meta name="description" content="Convite para a Noite do Terror." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0A0402" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Você recebeu uma carta 🎃" />
+  <meta property="og:description" content="Convite para a Noite do Terror. Abra se tiver coragem." />
+  <meta property="og:image" content="https://SUBDOMINIO.convidaeu.com.br/og-convite.jpg" />
+
+  <link rel="icon" href="icone.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="estilo.css" />
+  <script src="config.js"></script>
+</head>
+<body>
+  <main id="conteudo">
+    <section class="saudacao surgir">
+      <p class="rotulo" id="saudacao">Você foi convocado</p>
+    </section>
+
+    <figure class="hero surgir t1">
+      <img class="olhos" src="olhos.webp" alt="" width="660" height="290" />
+      <h1 id="v-evento">Noite do Terror</h1>
+      <p class="subtitulo" id="v-subtitulo"></p>
+    </figure>
+
+    <section class="carta surgir t2" id="carta">
+      <p class="assinatura" id="v-anfitriao"></p>
+    </section>
+
+    <section class="detalhes" aria-label="Informações da festa">
+      <div class="detalhes-inner">
+        <p class="titulo-bloco" id="v-bloco">Noite do Terror</p>
+
+        <div class="quando">
+          <div>
+            <p class="rotulo">Data</p>
+            <p class="valor" id="v-data">Em breve</p>
+            <p class="sub" id="v-dia"></p>
+          </div>
+          <span class="divisor" aria-hidden="true"></span>
+          <div>
+            <p class="rotulo">Horário</p>
+            <p class="valor" id="v-hora">Em breve</p>
+            <p class="sub" id="v-hora-fim"></p>
+          </div>
+        </div>
+
+        <div class="linha-ouro" aria-hidden="true"></div>
+
+        <div class="onde">
+          <p class="rotulo">Local</p>
+          <p class="valor" id="v-local"></p>
+          <p class="endereco" id="v-endereco"></p>
+          <a class="mapa" id="v-mapa" href="#" target="_blank" rel="noopener">Ver no mapa</a>
+          <p class="segredo" id="v-segredo" hidden>O endereço chega para quem confirmar.</p>
+        </div>
+
+        <p class="contagem" id="contagem" hidden></p>
+
+        <div class="confirmar">
+          <div class="fantasia" id="fantasia-wrap" hidden>
+            <label class="rotulo" for="fantasia">Qual vai ser sua fantasia?</label>
+            <input id="fantasia" type="text" maxlength="60" autocomplete="off" placeholder="vampira, zumbi, bruxa…" />
+          </div>
+          <a class="btn-confirmar" id="btn-confirmar" href="#" target="_blank" rel="noopener">Confirmar presença</a>
+          <p class="nota" id="nota-confirmar" hidden>A confirmação de presença será liberada em breve.</p>
+          <p class="agenda" id="agenda" hidden>
+            Adicionar à agenda:
+            <a id="agenda-google" href="#" target="_blank" rel="noopener">Google</a>
+            <span id="agenda-ics-wrap" hidden> · <a id="agenda-ics" href="evento.ics">iPhone / Outlook</a></span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <p class="encerramento" id="v-encerramento"></p>
+    <div class="quero">
+      <p>Gostou desta carta?</p>
+      <a id="quero-convite" href="https://convidaeu.com.br" target="_blank" rel="noopener">Quero um convite assim</a>
+    </div>
+    <p class="marca-rodape">convite por <a href="https://convidaeu.com.br" target="_blank" rel="noopener">Convida&amp;u</a></p>
+  </main>
+
+  <script>
+    (function () {
+      var $ = function (id) { return document.getElementById(id); };
+      var nome = (new URLSearchParams(location.search).get('nome') || '').trim().slice(0, 40);
+
+      // ---------- Textos ----------
+      if (nome) { $('saudacao').innerHTML = ''; $('saudacao').append('Para ', Object.assign(document.createElement('strong'), { textContent: nome })); }
+      $('v-evento').textContent = CONFIG.evento;
+      $('v-bloco').textContent = CONFIG.evento;
+      $('v-subtitulo').textContent = CONFIG.subtitulo || '';
+      $('v-subtitulo').hidden = !CONFIG.subtitulo;
+      document.title = 'Convite • ' + CONFIG.evento;
+
+      var carta = $('carta'), assinatura = $('v-anfitriao');
+      (CONFIG.texto || []).forEach(function (t) {
+        var p = document.createElement('p'); p.textContent = t; carta.insertBefore(p, assinatura);
+      });
+      assinatura.textContent = CONFIG.anfitriao || '';
+      assinatura.hidden = !CONFIG.anfitriao;
+      $('v-encerramento').innerHTML = CONFIG.encerramento || '';
+
+      // ---------- "Quero um convite assim" → WhatsApp da Convida&u ----------
+      // Vai junto o nome da festa e o endereço do convite, para saber de onde veio o lead.
+      var CONVIDAEU_WHATSAPP = '5521976184539';
+      $('quero-convite').href = 'https://wa.me/' + CONVIDAEU_WHATSAPP + '?text=' + encodeURIComponent(
+        'Oi! Vi o convite da ' + CONFIG.evento + ' (' + location.hostname + ') e quero um assim para a minha festa.');
+
+      // ---------- Local ----------
+      var enderecoCompleto = [CONFIG.local, (CONFIG.endereco || '').replace(/\s*—\s*/g, ', '), CONFIG.cidade].filter(Boolean).join(', ');
+      $('v-local').textContent = CONFIG.local;
+      if (CONFIG.mostrarEndereco === false) {
+        $('v-endereco').hidden = true;
+        $('v-mapa').hidden = true;
+        $('v-segredo').hidden = false;
+        enderecoCompleto = CONFIG.local; // a agenda também não recebe a rua
+      } else {
+        var end = $('v-endereco');
+        end.textContent = CONFIG.endereco;
+        if (CONFIG.cidade) { end.appendChild(document.createElement('br')); end.appendChild(document.createTextNode(CONFIG.cidade)); }
+        $('v-mapa').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(enderecoCompleto);
+      }
+
+      // ---------- Confirmar presença (WhatsApp) ----------
+      var btn = $('btn-confirmar');
+      if (CONFIG.perguntarFantasia) $('fantasia-wrap').hidden = false;
+      function mensagem() {
+        var msg = 'Olá! ' + (nome ? 'Sou ' + nome + ' e confirmo' : 'Confirmo') + ' minha presença na ' + CONFIG.evento + '.';
+        var fantasia = ($('fantasia').value || '').trim();
+        if (CONFIG.perguntarFantasia && fantasia) msg += ' Minha fantasia: ' + fantasia + '.';
+        if (!nome) msg += ' Meu nome é: ';
+        return msg;
+      }
+      if (CONFIG.whatsapp) {
+        var numero = CONFIG.whatsapp.replace(/\D/g, '');
+        var atualizar = function () { btn.href = 'https://wa.me/' + numero + '?text=' + encodeURIComponent(mensagem()); };
+        atualizar();
+        $('fantasia').addEventListener('input', atualizar);
+        btn.addEventListener('click', atualizar);
+      } else {
+        btn.removeAttribute('target');
+        btn.addEventListener('click', function (e) { e.preventDefault(); $('nota-confirmar').hidden = false; });
+      }
+
+      // ---------- Data e horário ----------
+      var temData = /^\d{4}-\d{2}-\d{2}$/.test(CONFIG.data);
+      if (!temData) return;
+      var temHora = /^\d{2}:\d{2}$/.test(CONFIG.horaInicio);
+      var temFim = /^\d{2}:\d{2}$/.test(CONFIG.horaFim);
+      var inicio = new Date(CONFIG.data + 'T' + (temHora ? CONFIG.horaInicio : '00:00') + ':00-03:00');
+      var fim = temFim ? new Date(CONFIG.data + 'T' + CONFIG.horaFim + ':00-03:00') : new Date(inicio.getTime() + 3 * 36e5);
+      if (fim <= inicio) fim = new Date(fim.getTime() + 864e5); // termina depois da meia-noite
+      var tz = { timeZone: 'America/Sao_Paulo' };
+      var hora = function (s) { var p = s.split(':'); return +p[0] + 'h' + (p[1] !== '00' ? p[1] : ''); };
+
+      $('v-data').textContent = inicio.toLocaleDateString('pt-BR', Object.assign({ day: 'numeric', month: 'long' }, tz));
+      $('v-dia').textContent = inicio.toLocaleDateString('pt-BR', Object.assign({ weekday: 'long' }, tz));
+      if (temHora) $('v-hora').textContent = hora(CONFIG.horaInicio);
+      if (temFim) $('v-hora-fim').textContent = 'até ' + hora(CONFIG.horaFim);
+
+      // Contagem: "Faltam 12 dias"
+      var hoje = new Date(new Date().toLocaleDateString('en-CA', tz) + 'T00:00:00-03:00');
+      var dias = Math.round((new Date(CONFIG.data + 'T00:00:00-03:00') - hoje) / 864e5);
+      var cont = $('contagem');
+      if (dias > 1) cont.textContent = 'Faltam ' + dias + ' noites';
+      else if (dias === 1) cont.textContent = 'É amanhã à noite';
+      else if (dias === 0) cont.textContent = 'É hoje à noite';
+      cont.hidden = dias < 0;
+
+      // ---------- Adicionar à agenda ----------
+      var utc = function (d) { return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); };
+      var datas = temHora ? utc(inicio) + '/' + utc(fim)
+        : CONFIG.data.replace(/-/g, '') + '/' + utc(new Date(inicio.getTime() + 864e5)).slice(0, 8);
+      $('agenda-google').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+        '&text=' + encodeURIComponent(CONFIG.titulo || CONFIG.evento) +
+        '&dates=' + datas +
+        '&location=' + encodeURIComponent(enderecoCompleto);
+      $('agenda').hidden = false;
+
+      // O link do iPhone só aparece se o arquivo evento.ics estiver publicado junto do convite
+      if (location.protocol.indexOf('http') === 0) {
+        fetch('evento.ics', { method: 'HEAD', cache: 'no-store' })
+          .then(function (r) { if (r.ok) $('agenda-ics-wrap').hidden = false; })
+          .catch(function () {});
+      }
+    })();
+  </script>
+</body>
+</html>

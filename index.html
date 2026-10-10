@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Você recebeu uma carta • Noite do Terror</title>
+  <meta name="description" content="Convite para a Noite do Terror. Abra se tiver coragem." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0A0402" />
+
+  <!-- Prévia do link no WhatsApp: troque o texto e o endereço da imagem -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Você recebeu uma carta 🎃" />
+  <meta property="og:description" content="Convite para a Noite do Terror. Abra se tiver coragem." />
+  <meta property="og:image" content="https://SUBDOMINIO.convidaeu.com.br/og-convite.jpg" />
+
+  <link rel="icon" href="icone.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="preload" href="carta.webp" as="image" />
+  <link rel="preload" href="lingua.webp" as="image" />
+  <link rel="stylesheet" href="estilo.css" />
+  <script src="config.js"></script>
+</head>
+<body>
+  <button class="som" id="som" type="button" aria-pressed="false" aria-label="Desligar som">
+    <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+    <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>
+  </button>
+
+  <main class="capa">
+    <p class="rotulo surgir" id="para" hidden>Para <strong id="nome"></strong></p>
+    <h1 class="chamada surgir t1" id="chamada">Esta carta está com fome</h1>
+
+    <div class="palco surgir t2" id="palco" role="button" tabindex="0" aria-label="Abrir o convite">
+      <div class="fundo-olhos">
+        <div class="pupila esq" id="pup-esq"></div>
+        <div class="pupila dir" id="pup-dir"></div>
+      </div>
+      <img class="monstro" src="carta.webp" alt="Envelope-monstro com olhos brilhando" width="1254" height="1254" />
+      <img class="lingua" src="lingua.webp" alt="" width="268" height="349" />
+      <div class="brilho-boca"></div>
+    </div>
+
+    <p class="dica surgir t3" id="dica">Toque nela… se tiver coragem</p>
+  </main>
+
+  <script>
+    (function () {
+      var nome = (new URLSearchParams(location.search).get('nome') || '').trim().slice(0, 40);
+      if (nome) {
+        document.getElementById('nome').textContent = nome;
+        document.getElementById('para').hidden = false;
+      }
+      if (CONFIG.chamada) document.getElementById('chamada').textContent = CONFIG.chamada;
+      if (CONFIG.dica) document.getElementById('dica').textContent = CONFIG.dica;
+    })();
+  </script>
+  <script src="carta.js"></script>
+</body>
+</html>
